@@ -1,5 +1,7 @@
 package helix
 
+import "fmt"
+
 // PublishType The Pub/Sub broadcast type
 type ExtensionPubSubPublishType string
 
@@ -9,6 +11,10 @@ const (
 	ExtensionPubSubBroadcastPublish ExtensionPubSubPublishType = "broadcast"
 	ExtensionPubSubGlobalPublish    ExtensionPubSubPublishType = "global"
 )
+
+func (p *ExtensionPubSubPublishType) String() string {
+	return fmt.Sprint(p)
+}
 
 func (c *Client) createExtensionPubSubWhisper(opaqueId string) ExtensionPubSubPublishType {
 	return ExtensionPubSubPublishType("whisper-" + opaqueId)
@@ -32,7 +38,7 @@ func (c *Client) FormBroadcastSendPubSubPermissions() *PubSubPermissions {
 
 // FormGlobalSendPubSubPermissions create the pubsub permissions
 // for publishing a global targeted message
-func FormGlobalSendPubSubPermissions() *PubSubPermissions {
+func (c *Client) FormGlobalSendPubSubPermissions() *PubSubPermissions {
 	return &PubSubPermissions{
 		Send: []ExtensionPubSubPublishType{ExtensionPubSubGlobalPublish},
 	}
@@ -40,17 +46,17 @@ func FormGlobalSendPubSubPermissions() *PubSubPermissions {
 
 // FormGenericPubSubPermissions create the pubsub permissions
 // for publishing to message for any target type
-func FormGenericPubSubPermissions() *PubSubPermissions {
+func (c *Client) FormGenericPubSubPermissions() *PubSubPermissions {
 	return &PubSubPermissions{
 		Send: []ExtensionPubSubPublishType{ExtensionPubSubGenericPublish},
 	}
 }
 
 type SendExtensionPubSubMessageParams struct {
-	BroadcasterID     string `json:"broadcaster_id"`
-	Message           string `json:"message"`
-	Target            string `json:"target"`
-	IsGlobalBroadcast bool   `json:"is_global_broadcast"`
+	BroadcasterID     string   `json:"broadcaster_id"`
+	Message           string   `json:"message"`
+	Target            []string `json:"target"`
+	IsGlobalBroadcast bool     `json:"is_global_broadcast"`
 }
 
 type SendExtensionPubSubMessageResponse struct {
