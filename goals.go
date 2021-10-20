@@ -36,7 +36,7 @@ func (c *Client) GetCreatorGoals(payload *GetCreatorGoalsParams) (*CreatorGoalsR
 	goals := &CreatorGoalsResponse{}
 	resp.HydrateResponseCommon(&goals.ResponseCommon)
 	goals.Data.Goals = resp.Data.(*ManyGoals).Goals
-	goals.Data.Pagination = resp.Data.(*ManyBans).Pagination
+	goals.Data.Pagination = resp.Data.(*ManyGoals).Pagination
 
 	return goals, nil
 }
