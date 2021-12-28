@@ -64,13 +64,13 @@ type ExtensionLiveChannel struct {
 
 type ManyExtensionLiveChannels struct {
 	LiveChannels []ExtensionLiveChannel `json:"data"`
-	Pagination   Pagination             `json:"pagination"`
+	Pagination   string                 `json:"pagination"`
 }
 
 type ExtensionLiveChannelsParams struct {
-	ExtensionID string   `query:"extension_id"` // Required
-	After       string   `query:"after"`        // Optional
-	First       int      `query:"first,20"`     // Optional, Limit 100
+	ExtensionID string `query:"extension_id"` // Required
+	After       string `query:"after"`        // Optional
+	First       int    `query:"first,20"`     // Optional, Limit 100
 }
 
 type ExtensionLiveChannelsResponse struct {
