@@ -100,6 +100,70 @@ func TestGetExtensionTransactions(t *testing.T) {
 	}
 }
 
+func TestGetExtensionLiveChannels(t *testing.T) {
+	t.Parallel()
+
+	testCases := []struct {
+		statusCode     int
+		options        *Options
+		params         *ExtensionLiveChannelsParams
+		respBody       string
+		expectedErrMsg string
+	}{
+		{
+			http.StatusOK,
+			&Options{ClientID: "my-client-id"},
+			&ExtensionLiveChannelsParams{ExtensionID: "some-extension-id"},
+			`{ "data": [{ "broadcaster_id": "252766116", "broadcaster_name": "swoosh_xii", "game_name": "Tom Clancy's Rainbow Six Siege", "game_id": "460630", "title": "[PS4] ITA/ENG UNRANKED CHILLIN' (SUB 1/15) - !instagram !donation !sens !team !youtube" }, { "broadcaster_id": "264525686", "broadcaster_name": "gaddem_", "game_name": "For Honor", "game_id": "490382", "title": "any Kätzchen ? - 680 Rep + > Kompetitive Kitten" }, { "broadcaster_id": "264787895", "broadcaster_name": "LenhadorGameplay", "game_name": "For Honor", "game_id": "490382", "title": "Vazou o novo personagem! *Triste*" }], "pagination": { "cursor": "YVc1emRHRnNiQ015TmpJek5qazVOVHBoYWpKbGRIZDFaR0Z5YjNCMGN6UTJNMkZ1TUdwM2FHWnBZbm8yYW5rNjoy" } }`,
+		"",
+		},
+		{
+			http.StatusOK,
+			&Options{ClientID: "my-client-id"},
+			&ExtensionLiveChannelsParams{ExtensionID: "", First: 2},
+			`{"error":"Bad Request","status":400,"message":"missing extension id"}`,
+			"error: extension ID must be specified",
+		},
+	}
+
+	for _, testCase := range testCases {
+		c := newMockClient(testCase.options, newMockHandler(testCase.statusCode, testCase.respBody, nil))
+
+		resp, err := c.GetExtensionLiveChannels(testCase.params)
+		if err != nil {
+			if err.Error() == testCase.expectedErrMsg {
+				continue
+			}
+
+			t.Error(err)
+		}
+
+		if resp.StatusCode != testCase.statusCode {
+			t.Errorf("expected status code to be \"%d\", got \"%d\"", testCase.statusCode, resp.StatusCode)
+		}
+
+		if resp.StatusCode == http.StatusForbidden {
+			if resp.Error != "Forbidden" {
+				t.Errorf("expected error to be \"%s\", got \"%s\"", "Bad Request", resp.Error)
+			}
+
+			if resp.ErrorStatus != http.StatusForbidden {
+				t.Errorf("expected error status to be \"%d\", got \"%d\"", http.StatusForbidden, resp.ErrorStatus)
+			}
+
+			if resp.ErrorMessage != testCase.expectedErrMsg {
+				t.Errorf("expected error message to be \"%s\", got \"%s\"", testCase.expectedErrMsg, resp.ErrorMessage)
+			}
+
+			continue
+		}
+
+		if testCase.params.First != 0 && testCase.params.First != len(resp.Data.LiveChannels) {
+			t.Errorf("expected %d transactions, got %d", testCase.params.First, len(resp.Data.LiveChannels))
+		}
+	}
+}
+
 func TestExtensionSendChatMessage(t *testing.T) {
 	t.Parallel()
 
