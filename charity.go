@@ -26,6 +26,7 @@ type CharityDonationsResponse struct {
 
 type CharityCampaignAmount struct {
 	Value         int64  `json:"value"`
+	Amount        int64  `json:"amount"`
 	DecimalPlaces int64  `json:"decimal_places"`
 	Currency      string `json:"currency"`
 }
