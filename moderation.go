@@ -53,8 +53,8 @@ type BanUserParams struct {
 
 type BanUserRequestBody struct {
 	Duration int    `json:"duration,omitempty"` // optional
-	Reason   string `json:"reason"`   // required
-	UserId   string `json:"user_id"`  // required
+	Reason   string `json:"reason"`             // required
+	UserId   string `json:"user_id"`            // required
 }
 
 type BanUserResponse struct {
