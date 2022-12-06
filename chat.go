@@ -4,18 +4,20 @@ import "errors"
 
 type GetChatChattersParams struct {
 	BroadcasterID string `query:"broadcaster_id"`
-	ModeratorID   string `query:"broadcaster_id"`
+	ModeratorID   string `query:"moderator_id"`
 	After         string `query:"after"`
 	First         string `query:"first"`
 }
 
 type ChatChatter struct {
 	UserLogin string `json:"user_login"`
+	UserID    string `json:"user_id"`
+	Username  string `json:"user_name"`
 }
 
 type ManyChatChatters struct {
 	Chatters   []ChatChatter `json:"data"`
-	Pagination Pagination  `json:"pagination"`
+	Pagination Pagination    `json:"pagination"`
 }
 
 type GetChatChattersResponse struct {
