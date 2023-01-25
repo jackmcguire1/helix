@@ -27,6 +27,7 @@ type EventSubSubscription struct {
 // Conditions for a subscription, not all are necessary and some only apply to some subscription types, see https://dev.twitch.tv/docs/eventsub/eventsub-reference
 type EventSubCondition struct {
 	BroadcasterUserID     string `json:"broadcaster_user_id"`
+	ModeratorUserID       string `json:"moderator_user_id"`
 	FromBroadcasterUserID string `json:"from_broadcaster_user_id"`
 	ToBroadcasterUserID   string `json:"to_broadcaster_user_id"`
 	RewardID              string `json:"reward_id"`
