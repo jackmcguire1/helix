@@ -194,7 +194,7 @@ func (c *Client) GetEmoteSets(params *GetEmoteSetsParams) (*GetEmoteSetsResponse
 // SendChatAnnouncement sends an announcement to the broadcaster’s chat room.
 // Required scope: moderator:manage:announcements
 func (c *Client) SendChatAnnouncement(params *SendChatAnnouncementParams) (*SendChatAnnouncementResponse, error) {
-	resp, err := c.post("/chat/announcements", nil, params)
+	resp, err := c.postAsJSON("/chat/announcements", nil, params)
 	if err != nil {
 		return nil, err
 	}
