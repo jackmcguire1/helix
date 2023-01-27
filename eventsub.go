@@ -57,7 +57,10 @@ type ManyEventSubSubscriptions struct {
 // Response for getting all current subscriptions
 type EventSubSubscriptionsResponse struct {
 	ResponseCommon
-	Data ManyEventSubSubscriptions
+	Data         ManyEventSubSubscriptions
+	Total        int `json:"total"`
+	TotalCost    int `json:"total_cost"`
+	MaxTotalCost int `json:"max_total_cost"`
 }
 
 // Parameter for filtering subscriptions, currently only the status is filterable
