@@ -55,10 +55,7 @@ type ManyEventSubSubscriptions struct {
 // Response for getting all current subscriptions
 type EventSubSubscriptionsResponse struct {
 	ResponseCommon
-	Data         ManyEventSubSubscriptions
-	Total        int `json:"total"`
-	TotalCost    int `json:"total_cost"`
-	MaxTotalCost int `json:"max_total_cost"`
+	Data ManyEventSubSubscriptions
 }
 
 // Parameter for filtering subscriptions, currently only the status is filterable
@@ -686,6 +683,7 @@ func (c *Client) GetEventSubSubscriptions(params *EventSubSubscriptionsParams) (
 
 	eventSubs := &EventSubSubscriptionsResponse{}
 	resp.HydrateResponseCommon(&eventSubs.ResponseCommon)
+	eventSubs.Data.Total = resp.Data.(*ManyEventSubSubscriptions).Total
 	eventSubs.Data.TotalCost = resp.Data.(*ManyEventSubSubscriptions).TotalCost
 	eventSubs.Data.MaxTotalCost = resp.Data.(*ManyEventSubSubscriptions).MaxTotalCost
 	eventSubs.Data.EventSubSubscriptions = resp.Data.(*ManyEventSubSubscriptions).EventSubSubscriptions
