@@ -18,6 +18,7 @@ type ChatChatter struct {
 type ManyChatChatters struct {
 	Chatters   []ChatChatter `json:"data"`
 	Pagination Pagination    `json:"pagination"`
+	Total      int           `json:"total"`
 }
 
 type GetChatChattersResponse struct {
