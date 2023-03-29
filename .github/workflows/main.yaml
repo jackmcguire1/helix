@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
-      - run: go test ./... -race -coverprofile=coverage.out -covermode=atomic
+      - run: go test -v -parallel=10 -covermode=count -coverprofile=coverage.out
       - run: go vet .
       - uses: codecov/codecov-action@v3
         with:
