@@ -1,43 +1,16 @@
-name: Tests and Coverage
-
-on: [push, pull_request]
-
+on:
+  push:
+    branches:
+      - main
 jobs:
-  lint:
+  build-deploy:
     runs-on: ubuntu-latest
-    name: Check for linting issues
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup go
-        uses: actions/setup-go@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v3
+      - run: go test -v -parallel=10 -covermode=count -coverprofile=coverage.out
+      - run: go vet .
+      - uses: codecov/codecov-action@v3
         with:
-          go-version: 1.19.x
-      - name: Lint
-        run: |
-          go vet .
-  build:
-    needs: lint
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        go:
-          - 1.19.x
-          - 1.18.x
-    name: Test with Go v${{ matrix.go }}
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup go
-        uses: actions/setup-go@v2
-        with:
-          go-version: ${{ matrix.go }}
-      - name: Setup
-        run: |
-          go install github.com/mattn/goveralls@latest
-      - name: Test
-        run: |
-          go test -v -parallel=10 -covermode=count -coverprofile=coverage.out
-      - name: Send coverage
-        env:
-          COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          goveralls -coverprofile=coverage.out -service=github
+          token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true
